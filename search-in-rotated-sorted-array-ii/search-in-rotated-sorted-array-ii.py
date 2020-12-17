@@ -1,32 +1,34 @@
 class Solution:
     def search(self, nums: List[int], target: int) -> bool:
         if len(nums) == 0: return False
-        l, n = 0, len(nums)
-        r = n-1
-        rotation = None
+        n = len(nums)
+        l, r, pivot = 0, n-1, None
         while l < r:
             m = l + (r-l)//2
             if nums[m] == nums[r]:
-                if (r != 0 and nums[r] >= nums[r-1]):
-                    r -= 1
-                else:
-                    rotation = r
+                # find the minimum value index vs. just minimum value
+                if (nums[r] < nums[r-1]):
+                    pivot = r
                     break
+                r -= 1
             elif nums[m] > nums[r]:
                 l = m + 1
             else:    
                 r = m
-                
-        if not rotation:
-            rotation = l
-            
+        
+        if not pivot:
+            pivot = l
+        
         l, r = 0, n-1
+        if nums[pivot] <= target <= nums[r]:
+            l = pivot
+        else:
+            r = pivot
         while l < r:
             m = l + (r-l)//2
-            midPlusRotation = (m + rotation) % n
-            if nums[midPlusRotation] >= target:
-                r = m
-            else:
+            if nums[m] < target:
                 l = m + 1
-        return nums[(l + rotation) % n] == target
+            else:
+                r = m
+        return True if nums[l] == target else False
             
