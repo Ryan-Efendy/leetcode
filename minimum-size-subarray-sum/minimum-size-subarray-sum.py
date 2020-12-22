@@ -1,7 +1,7 @@
 class Solution:
     def minSubArrayLen(self, s: int, nums: List[int]) -> int:
+        min_len, window_sum = math.inf, 0
         i, j = 0, 0
-        window_sum, min_len = 0, math.inf
         while j < len(nums):
             window_sum += nums[j]
             j += 1
