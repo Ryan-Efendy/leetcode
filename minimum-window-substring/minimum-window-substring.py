@@ -1,10 +1,8 @@
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-        d = collections.defaultdict(int)
+        d = collections.Counter(t)
         char_count = len(t)
         min_window_start, min_window_length = 0, math.inf
-        for ch in t:
-            d[ch] += 1
         i, j = 0, 0
         while j < len(s):
             if d[s[j]] > 0: char_count -= 1
