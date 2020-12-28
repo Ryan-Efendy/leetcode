@@ -1,3 +1,4 @@
+[Discussion Post (created on 28/11/2020 at 11:35)](https://leetcode.com/problems/longest-repeating-character-replacement/submissions/)  
 <h2>424. Longest Repeating Character Replacement</h2><h3>Medium</h3><hr><div><p>Given a string <code>s</code>&nbsp;that consists of only uppercase English letters, you can perform at most <code>k</code> operations on that string.</p>
 
 <p>In one operation, you can choose <strong>any</strong> character of the string and change it to any other uppercase English character.</p>
