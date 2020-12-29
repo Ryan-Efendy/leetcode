@@ -9,17 +9,14 @@ class Solution:
            [1,2,3]
     '''
     def subarraySum(self, nums: List[int], k: int) -> int:
-        prefix = [None] * len(nums)
-        prefix[0] = nums[0]
-        for i in range(1,len(nums)):
-            prefix[i] = prefix[i-1] + nums[i]
-        prefix = [0] + prefix
-        
-        res = 0
+        res = count = 0
         d = defaultdict(int)
-        for i in range(len(prefix)):
-            if prefix[i]-k in d: res += d[prefix[i]-k]
-            d[prefix[i]] += 1
+        d[0] += 1
+        for num in nums:
+            count += num
+            if count - k in d:
+                res += d[count-k]
+            d[count] += 1
         return res
             
                 
