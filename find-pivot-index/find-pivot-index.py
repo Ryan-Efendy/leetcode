@@ -8,15 +8,10 @@ class Solution:
         if len(nums) == 0: return -1 
         if len(nums) == 1: return 0
         if len(nums) == 2: return -1
-       
-        prefix = [None] * len(nums)
-        prefix[0] = nums[0]
-        for i in range(1, len(nums)):
-            prefix[i] = prefix[i-1] + nums[i]
-            
-        if prefix[len(nums)-1] - prefix[0] == 0: return 0
         
-        for i in range(1, len(prefix)):
-            if prefix[i-1] == prefix[len(prefix)-1] - prefix[i]:
-                return i
+        totalSum, leftSum, rightSum = sum(nums), 0, 0
+        for i, num in enumerate(nums):
+            rightSum = totalSum - num - leftSum
+            if leftSum == rightSum: return i
+            leftSum += num
         return -1
