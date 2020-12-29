@@ -13,12 +13,12 @@ class Solution:
  preSum = [0,-2,-3,-1,0]
     '''
     def maxSubArrayLen(self, nums: List[int], k: int) -> int:
-        preSum = list(accumulate(nums))
+        cum_sum, res = 0, 0
         d = {0: -1}
-        res = 0
-        for i in range(len(preSum)):
-            if preSum[i]-k in d:
-                res = max(res, i - d[preSum[i]-k])
-            if preSum[i] not in d:
-                d[preSum[i]] = i
+        for i in range(len(nums)):
+            cum_sum += nums[i]
+            if cum_sum-k in d:
+                res = max(res, i - d[cum_sum-k])
+            if cum_sum not in d: 
+                d[cum_sum] = i # only keep the oldest index to have the longest subarray
         return res
