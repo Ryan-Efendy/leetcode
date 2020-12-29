@@ -13,16 +13,12 @@ class Solution:
  preSum = [0,-2,-3,-1,0]
     '''
     def maxSubArrayLen(self, nums: List[int], k: int) -> int:
-        preSum = [0] * (len(nums)+1)
-        for i in range(len(nums)):
-            preSum[i+1] = preSum[i] + nums[i]
-        d = {}
+        preSum = list(accumulate(nums))
+        d = {0: -1}
         res = 0
         for i in range(len(preSum)):
             if preSum[i]-k in d:
                 res = max(res, i - d[preSum[i]-k])
-            if preSum[i] in d:
-                d[preSum[i]] = min(d[preSum[i]], i)
-            else:
+            if preSum[i] not in d:
                 d[preSum[i]] = i
         return res
