@@ -1,3 +1,4 @@
+[Discussion Post (created on 21/0/2021 at 18:24)](https://leetcode.com/problems/insert-delete-getrandom-o1/solution/)  
 <h2>380. Insert Delete GetRandom O(1)</h2><h3>Medium</h3><hr><div><p>Implement the&nbsp;<code>RandomizedSet</code> class:</p>
 
 <ul>
