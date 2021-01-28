@@ -1,3 +1,4 @@
+[Discussion Post (created on 28/0/2021 at 11:59)](https://leetcode.com/problems/copy-list-with-random-pointer/solution/)  
 <h2>138. Copy List with Random Pointer</h2><h3>Medium</h3><hr><div><p>A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.</p>
 
 <p>Return a <a href="https://en.wikipedia.org/wiki/Object_copying#Deep_copy" target="_blank"><strong>deep copy</strong></a> of the list.</p>
