@@ -11,16 +11,21 @@ class Node:
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
         if not root: return root
-        q = collections.deque([root])
-        while q:
-            n = len(q)
-            for i in range(n):
-                curr = q.popleft()
-                if curr.left:
-                    q.append(curr.left)
-                if curr.right:
-                    q.append(curr.right)
-                if len(q):
-                    curr.next = q[0]
-            curr.next = None
+        head = root
+        while head:
+            dummy = Node(0)
+            tmp = dummy
+            
+            while head:
+                if head.left:
+                    tmp.next = head.left
+                    tmp = tmp.next
+                if head.right:
+                    tmp.next = head.right
+                    tmp = tmp.next
+                head = head.next
+        
+            head = dummy.next
+    
         return root
+        
