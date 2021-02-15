@@ -11,17 +11,20 @@ class Node:
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
         if not root: return root
-        queue = collections.deque()
-        queue.append(root)
-        while queue:
-            n = len(queue)
-            for i in range(n):
-                curr = queue.popleft()
-                if curr.left:
-                    queue.append(curr.left)
-                if curr.right:
-                    queue.append(curr.right)
-                if len(queue):
-                    curr.next = queue[0]
-            curr.next = None
+        leftmost = root
+        while leftmost.left:
+            head = leftmost
+            while head:
+                head.left.next = head.right
+
+                if head.next:
+                    head.right.next = head.next.left
+
+                head = head.next
+            leftmost = leftmost.left
         return root
+                
+                
+            
+            
+                
