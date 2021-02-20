@@ -26,20 +26,20 @@ class Trie:
         curr.isEnd = True
             
     def search(self, word: str) -> bool:
+        def dfs(node: TrieNode, word: str) -> bool:
+            for i, ch in enumerate(word):
+                if ch == '.':
+                    for child in node.children.values():
+                        if dfs(child, word[i+1:]): return True
+                    return False
+                if ch in node.children:
+                    node = node.children[ch]
+                else:
+                    return False
+            return node.isEnd 
+        
         curr = self.root
-        stack = [(curr, word)]
-        while stack:
-            node, word = stack.pop()
-            if not word:
-                if node.isEnd:
-                    return True
-            elif word[0] in node.children:
-                stack.append((node.children[word[0]], word[1:]))
-            elif word[0] == '.':
-                for child in node.children.values():
-                    stack.append((child, word[1:]))
-                
-        return False
+        return dfs(curr, word)
 
 # Your WordDictionary object will be instantiated and called as such:
 # obj = WordDictionary()
