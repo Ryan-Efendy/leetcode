@@ -13,6 +13,7 @@ class Solution:
         while q:
             lock, turn = q.popleft()
             if lock == target: return turn
+            if lock in deadends: continue
             
             for neighbor in self.get_neighbors(lock):
                 if neighbor not in deadends and neighbor not in seen:
