@@ -1,3 +1,4 @@
+[Discussion Post (created on 28/1/2021 at 22:7)](https://leetcode.com/problems/implement-stack-using-queues/solution/)  
 <h2>225. Implement Stack using Queues</h2><h3>Easy</h3><hr><div><p>Implement a last in first out (LIFO) stack using only two queues. The implemented stack should support all the functions of a normal queue (<code>push</code>, <code>top</code>, <code>pop</code>, and <code>empty</code>).</p>
 
 <p>Implement the <code>MyStack</code> class:</p>
