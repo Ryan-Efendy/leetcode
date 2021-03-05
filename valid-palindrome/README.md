@@ -1,3 +1,4 @@
+[Discussion Post (created on 5/2/2021 at 15:31)](https://leetcode.com/problems/valid-palindrome/discuss/?currentPage=1&orderBy=most_votes&query=)  
 <h2>125. Valid Palindrome</h2><h3>Easy</h3><hr><div><p>Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.</p>
 
 <p><strong>Note:</strong>&nbsp;For the purpose of this problem, we define empty string as valid palindrome.</p>
