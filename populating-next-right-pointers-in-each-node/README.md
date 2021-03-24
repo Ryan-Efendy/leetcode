@@ -1,3 +1,4 @@
+[Discussion Post (created on 24/2/2021 at 15:21)](https://leetcode.com/problems/populating-next-right-pointers-in-each-node/submissions/)  
 <h2>116. Populating Next Right Pointers in Each Node</h2><h3>Medium</h3><hr><div><p>You are given a <strong>perfect binary tree</strong>&nbsp;where&nbsp;all leaves are on the same level, and every parent has two children. The binary tree has the following definition:</p>
 
 <pre>struct Node {
