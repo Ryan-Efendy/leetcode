@@ -1,16 +1,24 @@
 class Solution:
-    def subarraysWithKDistinct(self, A: List[int], K: int) -> int:
-        def getKMostCount(k):
-            d = collections.defaultdict(int)
-            i, j = 0, 0
-            max_len = 0
-            while j < len(A):
-                d[A[j]] += 1
-                j += 1
-                while len(d) > k:
-                    d[A[i]] -= 1
-                    if not d[A[i]]: d.pop(A[i], None)
-                    i += 1
-                max_len += j-i
-            return max_len
-        return getKMostCount(K) - getKMostCount(K-1)
+    def subarraysWithKDistinct(self, nums: List[int], k: int) -> int:
+        '''
+        Sliding window (two pointers) / Reduce to "Subarrays with at most K different nums"
+        Ans = f(K) - f(K-1) # exact K different nums
+
+        Time complexity: 0(n) Space complexity: 0(n)
+        '''
+        def getKMostCount(nums: List[int], k: int) -> int:
+            counter = collections.defaultdict(int)
+            left = 0
+            res = 0
+            for right, num in enumerate(nums):
+                counter[num] += 1
+
+                while len(counter) > k:
+                    counter[nums[left]] -= 1
+                    if counter[nums[left]] == 0: del counter[nums[left]]
+                    left += 1
+
+                res += right - left + 1
+            return res
+        
+        return getKMostCount(nums, k) - getKMostCount(nums, k-1)
