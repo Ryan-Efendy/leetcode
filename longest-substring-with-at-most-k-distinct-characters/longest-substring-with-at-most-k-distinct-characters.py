@@ -1,16 +1,17 @@
 class Solution:
     def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
-        i, j, res = 0, 0, 0
         counter = collections.defaultdict(int)
-        while j < len(s):
-            counter[s[j]] += 1
+        left = 0
+        res = 0
+        for right, ch in enumerate(s):
+            counter[ch] += 1
+
             while len(counter) > k:
-                counter[s[i]] -= 1
-                if not counter[s[i]]:
-                    del counter[s[i]]
-                i += 1
-            
-            res = max(res, j - i + 1)
-            j += 1
-            
+                counter[s[left]] -= 1
+                if counter[s[left]] == 0:
+                    del counter[s[left]]
+                left += 1
+
+            res = max(res, right - left + 1)
+
         return res
