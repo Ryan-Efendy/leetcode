@@ -1,67 +1,46 @@
 class Solution:
-    def maxSumOfThreeSubarrays(self, nums: List[int], k: int, m = 3) -> List[int]:
+    def maxSumOfThreeSubarrays(self, nums: List[int], k: int) -> List[int]:
         '''
-        * dp arr of size n-k+1
-        * prefix sum of maxLeft, maxRight of size k
-        * O(n) Time & Space
+        max_val = 13, start_idx = 4
+        
+        max_two_subarr, idx_lsts
+        
+        max_three_subarr, idx_lsts
         
                   0  1  2  3  4  5  6  7
         input = [ 1, 2, 1, 2, 6, 7, 5, 1], 2
+                   [3][3][3]
         
-       presum = [ 1, 3, 3, 3, 8,13,12, 6]
-   left_max_i = [ 0, 1, 1, 1, 4, 5, 5, 5]
-  right_max_i = [ 5, 5, 5, 5, 5, 5, 6, 7]
-  
-  mid: 2k-1 .. n-k-1 => 3 .. 5
-                  0  1  2  3  4  5  6  7
-        input = [ 1, 2, 1, 2, 6, 7, 5, 1]
-                   mid ->  -------
-                   
- max(presum[mid] + presum[left_max_i[mid-k]] + presum[right_max[mid+k]])
         '''
+        bestOneIndex = 0
+        bestTwoIndex = [0, k]
+        bestThreeIndex = [0, k, k*2]
+
+        maxOneTotalSum = sum(nums[ : k])
+        maxTwoTotalSum = sum(nums[: k*2])
+        maxThreeTotalSum = sum(nums[:k*3])
+
+        curOneSum = sum(nums[:k])
+        curTwoSum = sum(nums [k: k*2])
+        curThreeSum = sum(nums[k*2:k*3])
+
         n = len(nums)
-        presum = [0] * n
-        
-        sum = 0
-        for i in range(n):
-            sum += nums[i]
-            if i >= k:
-                sum -= nums[i-k]
-            presum[i] = sum
-        # print(presum)
-            
-        left_max_i, right_max_i = [0] * n, [0] * n
-        max_left_idx, max_right_idx = 0, n-1
-        for i in range(n):
-            if presum[i] > presum[max_left_idx]:
-                max_left_idx = i
-            left_max_i[i] = max_left_idx
-            
-        for i in range(n-1, -1, -1):
-            if presum[i] >= presum[max_right_idx]:
-                max_right_idx = i
-            right_max_i[i] = max_right_idx
-            
-        # print(left_max_i)
-        # print(right_max_i)
-            
-        arr_idxs = [0] * m
-        max_sum = -1
-        for mid in range(2*k-1, n-k):
-            left = left_max_i[mid - k]
-            right = right_max_i[mid + k]
-            sum = presum[left] + presum[mid] + presum[right]
-            print(sum)
-            if sum > max_sum:
-                max_sum = sum
-                arr_idxs[0] = left - k + 1
-                arr_idxs[1] = mid - k + 1
-                arr_idxs[2] = right - k + 1
-        
-        return arr_idxs
-        
-        
-                
-        
-        
-        
+
+        for i in range(1, n-k*3+1):
+            curOneSum = curOneSum - nums[i-1] + nums[i+k-1]
+            curTwoSum = curTwoSum - nums[i+k-1] + nums[i+k*2-1]
+            curThreeSum = curThreeSum - nums[i+k*2-1] + nums[i+k*3-1]
+
+            if curOneSum > maxOneTotalSum:
+                bestOneIndex = i
+                maxOneTotalSum = curOneSum
+
+            if curTwoSum + maxOneTotalSum > maxTwoTotalSum:
+                bestTwoIndex = [bestOneIndex, i+k]
+                maxTwoTotalSum = curTwoSum + maxOneTotalSum
+
+            if curThreeSum + maxTwoTotalSum > maxThreeTotalSum:
+                bestThreeIndex = bestTwoIndex + [i+k*2]
+                maxThreeTotalSum = curThreeSum + maxTwoTotalSum
+
+        return bestThreeIndex
