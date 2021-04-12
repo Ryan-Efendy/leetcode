@@ -17,9 +17,9 @@ class Solution:
 
         for j, ch in enumerate(s):
             counter[ch] += 1
-            max_count = max(max_count, counter[ch])
-
-            while j - i + 1 - max_count > k:
+            # max_count = max(max_count, counter[ch])
+            # len of slidingWindow j - i + 1
+            while j - i + 1 - max(counter.values()) > k:
                 counter[s[i]] -= 1
                 if not counter[s[i]]:
                     del counter[s[i]]
