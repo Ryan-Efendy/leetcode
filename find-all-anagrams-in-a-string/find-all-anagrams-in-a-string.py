@@ -1,20 +1,18 @@
 class Solution:
     def findAnagrams(self, s: str, p: str) -> List[int]:
-        n, m = len(s), len(p)
-        if n < m: return []
-
-        p_count = Counter(p)
-        s_count = Counter()
-
-        result = []
-        for i in range(n):
-            windowStart, windowEnd = i-m, i
-            s_count[s[windowEnd]] += 1
-            if i >= m:
-                if s_count[s[windowStart]]==1:
-                    del s_count[s[windowStart]]
-                else:
-                    s_count[s[windowStart]] -= 1
-            if p_count == s_count:
-                result.append(windowStart + 1)
+        target = [0]*26
+        window = [0]*26
+        result=[]
+        
+        for x in p:
+            target[ord(x)-ord('a')] += 1
+        
+        for i, x in enumerate(s):
+            window[ord(x)-ord('a')] += 1
+            if i >= len(p):
+                del_char = s[i-len(p)]
+                window[ord(del_char)-ord('a')] -= 1
+            if window == target:
+                result.append(i-len(p)+1)
+        
         return result
