@@ -5,19 +5,33 @@
 #         self.next = next
 class Solution:
     def swapPairs(self, head: ListNode) -> ListNode:
-        d1 = d = ListNode(-1)
-        d.next = head
+        '''
+               \U0001f447 nxt
+        \U0001f921 ->1->2->3->4->❌ 
+        \U0001f446  \U0001f446
+       prev cur
+              ____          nxt, nxtNxt = cur.next, curr.next.next #save ptrs
+             /    \         nxt.next = curr
+        \U0001f921  1<-2  3->4->❌  nxt.next = curr
+         \____/             prev.next = nxt
+        \U0001f446  \U0001f446 \U0001f446            prev, curr = curr, nxtNxt # update ptrs
+       prev cur nxt        
+        '''
+        dummy = ListNode(next=head)
+        prev, curr = dummy, head
         
-        if not d.next or not d.next.next:
-            return head
+        # at least 2 nodes to reverse
+        while curr and curr.next:
+            # save ptrs
+            nxt, nxtNxt = curr.next, curr.next.next
 
-        while d.next and d.next.next:
-            p, q = d.next, d.next.next
-            d.next = q
-            p.next = q.next
-            q.next = p
-            
-            d = p
-        return d1.next
-        
-        
+            # reverse this pair
+            nxt.next = curr
+            curr.next = nxtNxt
+            prev.next = nxt
+
+            # update ptrs
+            prev = curr
+            curr = nxtNxt
+
+        return dummy.next
