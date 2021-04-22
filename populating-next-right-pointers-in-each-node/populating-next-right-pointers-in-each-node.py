@@ -10,21 +10,31 @@ class Node:
 
 class Solution:
     def connect(self, root: 'Node') -> 'Node':
+        '''
+        root = [1,2,3,4,5,6,7]
+         1           1=▶️❌        
+        / \         / \                
+       2   3       2=▶️ 3=▶️❌            
+      / \ / \     / \  / \            
+     4  5 6  7   4=▶️5=▶️6=▶️7=▶️❌
+     
+     since is perfect binary tree it'll have both left & right
+     1. connect curr.left.next = curr.right
+     2. if curr.next: curr.right.next = curr.next.left
+        '''
         if not root: return root
-        leftmost = root
-        while leftmost.left:
-            head = leftmost
-            while head:
-                head.left.next = head.right
-
-                if head.next:
-                    head.right.next = head.next.left
-
-                head = head.next
-            leftmost = leftmost.left
+        
+        queue = deque()
+        queue.append(root)
+        while queue:
+            curr = queue.popleft()
+            if curr.left:
+                curr.left.next = curr.right
+                
+                if curr.next:
+                    curr.right.next = curr.next.left
+                queue.append(curr.left)
+                queue.append(curr.right)
+        
         return root
-                
-                
-            
-            
-                
+    
