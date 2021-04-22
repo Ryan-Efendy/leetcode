@@ -23,18 +23,18 @@ class Solution:
      2. if curr.next: curr.right.next = curr.next.left
         '''
         if not root: return root
-        
-        queue = deque()
-        queue.append(root)
+
+        queue = deque([root])
         while queue:
-            curr = queue.popleft()
-            if curr.left:
-                curr.left.next = curr.right
-                
-                if curr.next:
-                    curr.right.next = curr.next.left
-                queue.append(curr.left)
-                queue.append(curr.right)
-        
+            pre = None
+            for _ in range(len(queue)):
+                curr = queue.popleft()
+                if pre:
+                    pre.next = curr
+                if curr.left:
+                    queue.append(curr.left)
+                if curr.right:
+                    queue.append(curr.right)
+
+                pre = curr
         return root
-    
