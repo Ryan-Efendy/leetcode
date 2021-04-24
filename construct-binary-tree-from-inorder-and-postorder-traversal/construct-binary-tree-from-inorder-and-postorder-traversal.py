@@ -6,17 +6,33 @@
 #         self.right = right
 class Solution:
     def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
-        if not inorder or not postorder: return None
-        return self.helper(inorder, 0, len(inorder)-1, postorder, 0, len(postorder)-1)
-        
-    def helper(self, inorder, i1, i2, postorder, p1, p2):
-        if i1 > i2: return None
-        root = TreeNode(postorder[p2])
-        idx = inorder.index(root.val)
-        delta = idx - i1
-        
-        root.left = self.helper(inorder, i1, idx-1,
-                                postorder, p1, p1+delta-1)
-        root.right = self.helper(inorder, i1+delta+1, i2,
-                                 postorder, p1+delta, p2-1)
-        return root
+        '''
+        Input: inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
+                3
+               / \
+              9   20
+                  / \ 
+                 15  7
+                 
+       postorder = [x0,x1,x2,x3,x4,x5,x6]    1. find root from postorder
+                    <--\U0001f446---> <--\U0001f446--->\U0001f446      
+                      left     right   root  2. divide left & right subtree in inorder
+        inorder  = [x0,x1,x2,x3,x4,x5,x6]
+                    <--\U0001f446--->\U0001f446  <--\U0001f446---> 
+                    left    root   right
+        '''
+        value_to_idx = dict()
+        for idx, value in enumerate(inorder):
+            value_to_idx[value] = idx
+
+        def helper(inorder, inStart, inEnd, postorder, postStart, postEnd):
+            if inStart > inEnd or postStart > postEnd:
+                return None
+            root = TreeNode(postorder[postEnd])
+            inRoot = value_to_idx[root.val]
+            numsLeft = inRoot - inStart
+            root.left = helper(inorder, inStart, inRoot - 1, postorder, postStart, postStart + numsLeft - 1)
+            root.right = helper(inorder, inStart + numsLeft + 1, inEnd, postorder, postStart + numsLeft, postEnd - 1)
+            return root
+
+        return helper(inorder, 0, len(inorder) - 1, postorder, 0, len(postorder) - 1)
