@@ -8,44 +8,36 @@
 class Codec:
 
     def serialize(self, root):
-        """Encodes a tree to a single string.
-        
-        :type root: TreeNode
-        :rtype: str
-        """
-        def helper1(root, res):
-            if not root:
-                res.append('#')
+        def dfs(node):
+            nonlocal arr
+            if not node:
+                arr.append('None')
                 return
-            res.append(str(root.val))
-            helper1(root.left, res)
-            helper1(root.right, res)
-            return ','.join(res)
-        
-        res = []
-        return helper1(root, res)
+            # preorder
+            arr.append(str(node.val))
+            dfs(node.left)
+            dfs(node.right)
+
+        arr = []
+        dfs(root)
+        return ','.join(arr)
 
     def deserialize(self, data):
-        """Decodes your encoded data to tree.
-        
-        :type data: str
-        :rtype: TreeNode
-        """
-        if not data: return data
-        print(data)
-        q = collections.deque(data.split(','))
-        
-        def helper(q):
-            if not q or not len(q): return None
-            curr = q.popleft()
-            if curr == '#': return None
-            root = TreeNode(int(curr))
-            root.left = helper(q)
-            root.right = helper(q)
+        def buildTree():
+            nonlocal idx
+            if arr[idx] == 'None':
+                return None
+
+            root = TreeNode(arr[idx])
+            idx += 1
+            root.left = buildTree()
+            idx += 1
+            root.right = buildTree()
             return root
-            
-        return helper(q)
-        
+
+        idx = 0
+        arr = data.split(',')
+        return buildTree()
         
 
 # Your Codec object will be instantiated and called as such:
