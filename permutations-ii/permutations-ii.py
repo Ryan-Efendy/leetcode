@@ -1,13 +1,22 @@
 class Solution:
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         res = []
-        nums.sort()
-        self.backtrack(nums, [], res)
+        unique = collections.Counter(nums)
+        def backtrack(nums, path):
+            if len(path) == len(nums): # 3. goal reached
+                res.append(path[:])
+                return
+            # handles duplicate
+            for num in unique: # 1. Choices
+                if unique[num] == 0: # 2. Constraint
+                    continue
+                unique[num] -= 1
+                path.append(num)  # choose
+                
+                backtrack(nums, path) # explore
+                
+                path.pop()            # unchoose
+                unique[num] += 1
+                    
+        backtrack(nums, [])
         return res
-        
-    def backtrack(self, nums, path, res):
-        if not nums:
-            res.append(path)
-        for i in range(len(nums)):
-            if i > 0 and nums[i] == nums[i-1]: continue
-            self.backtrack(nums[:i] + nums[i+1:], path + [nums[i]], res)
