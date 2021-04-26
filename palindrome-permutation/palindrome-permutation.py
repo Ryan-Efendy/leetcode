@@ -1,13 +1,10 @@
 class Solution:
-    def canPermutePalindrome(self, s: str) -> bool:
-        hashset = set()
-        for ch in s:
-            if ch in hashset:
-                hashset.remove(ch)
-            else:
-                hashset.add(ch)
-        if len(s) % 2 == 0:
-            return len(hashset) == 0
-        else:
-            return len(hashset) == 1
-            
+    def canPermutePalindrome(self, s: str) -> bool:
+        sets = set()
+        for char in s:
+            if char not in sets:
+                sets.add(char)
+            else:
+                sets.remove(char)
+        
+        return len(sets) <= 1
