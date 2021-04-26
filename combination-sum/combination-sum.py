@@ -1,17 +1,20 @@
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        '''
+        Input: candidates = [2,7,3,6], target = 7
+        1. sort candidates = [2,3,6,7]
+        Output: [[2,2,3],[7]]
+        
+        '''
         res = []
-        self.backtrack(candidates, target, 0, [], res)
-        return res
-        
-    def backtrack(self, candidates, target, i, tmp, res):
-        if target == 0:
-            res.append(tmp[:])
-            return
-        elif target < 0:
-            return
-        
-        for j in range(i, len(candidates)):
-            tmp.append(candidates[j])
-            self.backtrack(candidates, target-candidates[j], j, tmp, res)
-            tmp.pop()
+        def backtrack(path, start, end, target):
+            if target == 0: # goal
+                res.append(path[:])
+            elif target > 0: #
+                for i in range(start, end): # choices
+                    path.append(candidates[i]) # choose
+                    backtrack(path, i, end, target-candidates[i]) # explore
+                    path.pop()           # unchoose 
+
+        backtrack([], 0, len(candidates), target)
+        return res        
