@@ -1,3 +1,4 @@
+[Discussion Post (created on 25/3/2021 at 20:29)](https://leetcode.com/problems/palindrome-permutation/submissions/)  
 <h2>266. Palindrome Permutation</h2><h3>Easy</h3><hr><div><p>Given a string, determine if a permutation of the string could form a palindrome.</p>
 
 <p><strong>Example 1:</strong></p>
