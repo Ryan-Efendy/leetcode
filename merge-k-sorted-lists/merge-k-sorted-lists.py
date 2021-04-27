@@ -5,21 +5,25 @@
 #         self.next = next
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        '''
-        https://www.youtube.com/watch?v=ptYUCjfNhJY
-        https://www.youtube.com/watch?v=MbN_mhJntHg
-        
-        add node of each LL into the heap. Pop node from minHeap and make it the next node in the dummyList until minHeap is empty.
-        Time: O(Nlogk) Space: O(N)
-        '''
-        dummy = node = ListNode(-1)
+        dummy = curr = ListNode()
         minHeap = []
-        for lst in lists:
-            while lst:
-                heappush(minHeap, lst.val)
-                lst = lst.next
-                
+
+        # heap keeps (node val, node id, and node). Smallest node value has the most priority.
+        for node in lists:
+            if node:
+                # id(node) is for the comparator in case two nodes are of the same value
+                # workaround: cannot modify ListNode to create custom comperator
+                heapq.heappush(minHeap, (node.val, id(node), node))
+
+        # While our priority queue still has nodes
         while minHeap:
-            node.next = ListNode(heappop(minHeap))
-            node = node.next
+            # Get the smallest node inside our priority queue and remove it
+            curr.next = heapq.heappop(minHeap)[2]
+            
+            curr = curr.next
+
+            # If our node has a next, add it to our priority queue
+            if curr.next:
+                heapq.heappush(minHeap, (curr.next.val, id(curr.next), curr.next))
+
         return dummy.next
