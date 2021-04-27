@@ -1,15 +1,15 @@
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        buckets = [[] for _ in range(len(nums) + 1)]
-        number_count = collections.Counter(nums)
-            
-        for num, freq in number_count.items():
-            buckets[freq].append(num)
+        # return [x[0] for x in collections.Counter(nums).most_common(k)]
         
-        # buckets is a double array
-        flat_list = []
-        # traverse from right to left so number with higher frequency come first
-        for i in range(len(buckets) - 1, -1, -1):
-            bucket = buckets[i]
-            if bucket: flat_list.extend(bucket)
-        return flat_list[:k]
+        counter = collections.Counter(nums)
+        minHeap = []
+        for num, freq in counter.items():
+            heapq.heappush(minHeap, (freq, num))
+            if len(minHeap) > k:
+                heapq.heappop(minHeap)
+
+        res = []
+        while minHeap:
+            res.insert(0, heapq.heappop(minHeap)[1])
+        return res
