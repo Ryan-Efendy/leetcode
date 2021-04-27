@@ -1,8 +1,9 @@
-import collections
-
 class Solution:
-    def topKFrequent(self, words: List[str], k: int) -> List[str]:
+    def topKFrequent(self, words: List[str], k: int) -> List[str]:        
+        # maxHeap
+        
         count = collections.Counter(words)
-        candidates = count.keys()
-        res = sorted(candidates, key=lambda x: (-count[x], x))
-        return res[:k]
+        heap = [(-freq, word) for word, freq in count.items()]
+        heapq.heapify(heap)
+        return [heapq.heappop(heap)[1] for _ in range(k)]
+        
