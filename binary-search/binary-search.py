@@ -1,10 +1,13 @@
 class Solution:
-    def search(self, nums: List[int], target: int) -> int:
-        l, r = 0, len(nums)-1
-        while l < r:
-            m = l + (r-l+1)//2
-            if nums[m] <= target:
-                l = m
-            else:
-                r = m - 1
-        return l if nums[l] == target else -1
+    def search(self, nums: List[int], target: int) -> int:
+        # lo = 0
+        # hi = len(nums)-1
+        # while lo < hi:
+        #     mid = (lo + hi)//2 
+        #     if nums[mid] < target:
+        #         lo = mid + 1
+        #     else:
+        #         hi = mid
+        #     return lo if nums[lo] == target else -1
+        index = bisect.bisect_left(nums, target)
+        return index if index < len(nums) and nums[index] == target else -1
