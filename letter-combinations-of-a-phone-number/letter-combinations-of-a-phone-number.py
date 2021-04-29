@@ -1,24 +1,32 @@
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        mapping = {'1': '', '2': 'abc', '3':'def', '4':'ghi', '5':'jkl', '6': 'mno', '7':'pqrs', '8':'tuv', '9':'wxyz'}
-        length = len(digits)
-        res = []
+        '''
+        digits = "23"
+                            "23"
+                           / |  \ 
+                          /  |   \
+                        a    b     c
+                     / |\   /|\    /|\
+                    /  | \ / | \  / | \ 
+                 ad ae af bd be bf cd ce cf       
+        Time Complexity: O(n^3), Space complexity: O(n)
+        '''
+        # Map all the digits to their corresponding letters
+        letters = {"2": "abc", "3": "def", "4": "ghi", "5": "jkl", 
+                   "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"}
         
-        if (length == 0):
-            return res
-        
-        def backtrack(idx, candidate, digits, mapping, res):
-            if (idx == len(digits)):
-                res.append(candidate)
+        def backtrack(idx, path):
+            if len(path) == len(digits): # goal
+                res.append("".join(path))
                 return
-                
-            for next_char in mapping[digits[idx]]:
-                candidate += next_char
-                # print(next_char)
-                backtrack(idx+1, candidate, digits, mapping, res)
-                candidate = candidate[0:-1]
-        
-        backtrack(0, "", digits, mapping, res)
-        
+            
+            for letter in letters[digits[idx]]: # Choices
+                path.append(letter) # choose
+                backtrack(idx + 1, path) # explore
+                path.pop() # unchoose
+
+        res = []
+        if len(digits) == 0: 
+            return res
+        backtrack(0, [])
         return res
-        
