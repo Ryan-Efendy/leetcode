@@ -1,33 +1,29 @@
 class Solution:
-    def reorganizeString(self, S: str) -> str:
-        charFreqMap = collections.Counter(S)
+    def reorganizeString(self, s: str, k: int = 2) -> str:
+        '''
+        same as Rearrange String k Distance Apart, where k = 2
+        '''
+        # edge case
+        if k == 0: # k <= 1
+            return s
 
+        charFreqMap = collections.Counter(s)
         maxHeap = []
-        # add all characters to the max heap
         for char, freq in charFreqMap.items():
             heappush(maxHeap, (-freq, char))
 
+        queue = deque()
         res = []
-        while len(maxHeap) > 1:
-            currFreq, currChar = heappop(maxHeap)
-            nextFreq, nextChar = heappop(maxHeap)
-            
-            # append the current character to the result string and decrement its count
-            res.append(currChar)
-            res.append(nextChar)
-            
-            # add the previous entry back in the heap if its frequency is greater than zero
-            if -currFreq > 1:
-                heappush(maxHeap, (-(-currFreq - 1), currChar))
-            if -nextFreq > 1:
-                heappush(maxHeap, (-(-nextFreq - 1), nextChar))
-                
-        if maxHeap:
+        while maxHeap:
             freq, char = heappop(maxHeap)
-            if -freq > 1:
-                return ''
+            # append the current character to the result string and decrement its count
             res.append(char)
+            # decrement the freq and append to the queue
+            queue.append((char, freq+1)) # same as -(-freq - 1)
+            if len(queue) == k:
+                char, freq = queue.popleft()
+                if -freq > 0:
+                    heappush(maxHeap, (freq, char))
 
         # if we were successful in appending all the characters to the result string, return it
-        # return ''.join(res) if len(res) == len(S) else ""
-        return ''.join(res)
+        return ''.join(res) if len(res) == len(s) else ""
