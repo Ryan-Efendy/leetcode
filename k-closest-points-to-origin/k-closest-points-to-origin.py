@@ -1,15 +1,34 @@
 class Solution:
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
-        # sort O(NlogN)
-        # points.sort(key = lambda P: P[0]**2 + P[1]**2)
-        # return points[:k]
-    
-        # Divide and Conquer -> selection sort O(N)
+        '''
+        Euclidean distance (i.e., sqrt((x1 - x2)^2 + (y1 - y2)^2))
+                          |     *
+                          |    /|   
+                          |  /  |  A      A^2 + B^2 = C^2
+              ____________|/____|________
+                          |   B
+                          |
+                          |
+                          |  
+        apprach 1: sort O(NlogN)                          
+        '''
+        '''
+        points.sort(key = lambda P: P[0]**2 + P[1]**2)
+        return points[:k]
+        '''
+        '''
+        Divide and Conquer -> selection sort + partition O(N)
+        '''
         
-        # MaxHeap O(NlogK)
+        '''
+        maxheap - get k smallest elements O(nlgk)
+        '''
+        def getDist(x, y):
+            return x**2 + y**2
+        
         maxheap = []
         for point in points:
-            dist = point[0] * point[0] + point[1] * point[1]
+            dist = getDist(point[0], point[1])
             heapq.heappush(maxheap, (-dist, point))
             if len(maxheap) > k:
                 heapq.heappop(maxheap)
