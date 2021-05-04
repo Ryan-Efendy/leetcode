@@ -1,45 +1,41 @@
 class Solution:
-    def canFinish(self, n: int, edges: List[List[int]]) -> bool:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         '''
-        https://www.youtube.com/watch?v=L05HDfyDHjg
-        indegree - # of nodes coming in
-        outdegree  - # of nodes going out
+        https://www.youtube.com/watch?v=EgI5nU9etnU
+        DFS
+        prereq = [[0,1], [0,2], [1,3], [1,4], [3,4]]
         
-        topological sort
-        1. get mapping vertex:indegrees
-        2. vertex w/ 0 indegree is the start
-        3. process start & remove 1 indegree from neighbors, add any vertex w/ 0 indegree & repeat until queue is empty
-            otherwise cycle exists
-            
-        kahn's algo
-        1. node w/ indegree=0 is start
-        2. reduce indegree of currNode neigh
-        3. insert node w/ indegree=0
-        4. if # remove connections == # nodes: no cycle else cycle exists
-        
-        if there's no node w/ indegree=0 there's a cycle
+        coursesToPrereqMap = {      visited = set()
+            0: [1, 2],
+            1: [3, 4],
+            2: [],
+            3: [4],
+            4: []
+        }
         '''
-        # construct graph & calc inDegrees
-        graph = defaultdict(set)
-        inDegrees = {i:0 for i in range(n)}
-        for edge in edges:
-            graph[edge[0]].add(edge[1])
-            inDegrees[edge[1]] += 1
-        
-        q = collections.deque()
+        coursesToPrereq = { i: [] for i in range(numCourses)}
+        for course, prereq in prerequisites:
+            coursesToPrereq[course].append(prereq)
+
         visited = set()
+        def dfs(course):
+            # detect cycle
+            if course in visited:
+                return False
+            # optimization if no prereq or prereq already satisfied
+            if not coursesToPrereq[course]:
+                return True
+
+            visited.add(course)
+            for prereq in coursesToPrereq[course]:
+                if not dfs(prereq): return False
+            visited.remove(course)
+            coursesToPrereq[course] = []
+            return True
+
+        for course in range(numCourses):
+            if not dfs(course): return False
+        return True
         
-        # find nodes whose in degree == 0
-        for index, in_degree in inDegrees.items():
-            if in_degree == 0:
-                q.append(index)
-                
-        # loop all nodes whose in degree == 0
-        while q:
-            index = q.popleft()
-            visited.add(index)
-            for g in graph[index]:
-                inDegrees[g] -= 1
-                if inDegrees[g] == 0:
-                    q.append(g)
-        return len(visited) == n # all courses will be visited
+        
+        
