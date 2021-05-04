@@ -1,28 +1,37 @@
 class Solution:
-    def updateMatrix(self, matrix: List[List[int]]) -> List[List[int]]:
-        if not matrix or not len(matrix): return matrix
-        m, n = len(matrix), len(matrix[0])
+    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+        '''
+        BFS - add all 0's to queue
+        
+        [    0 1 2
+          0 [0,0,0],
+          1 [0,1,0],   Q = [(0,0), (0,1), (0,2), (1,0), (1,2)]
+          2 [1,1,1]
+        ]
+        
+        '''
+        if not mat or not len(mat): return mat
+        m, n = len(mat), len(mat[0])
         q = collections.deque()
         visitted = set()
-        
-        # init
+
+        # init - add all 0's to queue
         for i in range(m):
             for j in range(n):
-                if matrix[i][j] == 0:
+                if mat[i][j] == 0:
                     q.append((i, j))
                     visitted.add((i, j))
-        
-        directions = [(0,1), (1,0), (0,-1), (-1, 0)]
+
         # bfs
         while q:
-            # size = len(q)
-            # for _ in range(size):
-            x1, y1 = q.popleft() # 1. pull node
-            for x, y in directions: # getting all the neighbors
-                x2, y2 = x1 + x, y1 + y
-                # check if it's valid & hasn't been visitted yet
-                if x2 >= 0 and x2 < m and y2 >= 0 and y2 < n and (x2, y2) not in visitted:
-                    matrix[x2][y2] = matrix[x1][y1] + 1 # 2. process node
-                    q.append((x2, y2)) # 3. process its children
-                    visitted.add((x2, y2))
-        return matrix
+            size = len(q)
+            for _ in range(size):
+                i, j = q.popleft() # 1. pull node
+                for dx, dy in [(0,1), (1,0), (0,-1), (-1, 0)]: # getting all the neighbors
+                    x, y = i + dx, j + dy
+                    # check if it's valid & hasn't been visitted yet (all 0's are visited so won't update 0's)
+                    if x >= 0 and x < m and y >= 0 and y < n and (x, y) not in visitted:
+                        mat[x][y] = mat[i][j] + 1 # 2. process node
+                        q.append((x, y)) # 3. process its children
+                        visitted.add((x, y)) # add to visited
+        return mat
