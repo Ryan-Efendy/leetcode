@@ -1,41 +1,38 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        '''
-        https://www.youtube.com/watch?v=EgI5nU9etnU
-        DFS
-        prereq = [[0,1], [0,2], [1,3], [1,4], [3,4]]
-        
-        coursesToPrereqMap = {      visited = set()
-            0: [1, 2],
-            1: [3, 4],
-            2: [],
-            3: [4],
-            4: []
-        }
-        '''
-        coursesToPrereq = { i: [] for i in range(numCourses)}
-        for course, prereq in prerequisites:
-            coursesToPrereq[course].append(prereq)
+        sorted_list = []
 
-        visited = set()
-        def dfs(course):
-            # detect cycle
-            if course in visited:
-                return False
-            # optimization if no prereq or prereq already satisfied
-            if not coursesToPrereq[course]:
-                return True
+        # if numCourses <= 0:
+        #     return False
 
-            visited.add(course)
-            for prereq in coursesToPrereq[course]:
-                if not dfs(prereq): return False
-            visited.remove(course)
-            coursesToPrereq[course] = []
-            return True
+        # a. init adj lists & indegrees
+        graph = {i: [] for i in range(numCourses)}  # adjacency list graph
+        in_degree = {i: 0 for i in range(numCourses)}  # count of incoming edges
 
-        for course in range(numCourses):
-            if not dfs(course): return False
-        return True
-        
-        
+        # b. build from input and populate adj lists & indegrees
+        for prerequisite in prerequisites:
+            parent, child = prerequisite[0], prerequisite[1]
+            graph[parent].append(child)  # put the child into it's parent's list
+            in_degree[child] += 1
+
+        # c. find all node w/ 0 indegree and enqueue to Queue
+        sources = deque()
+        for key in in_degree:
+            if in_degree[key] == 0:
+                sources.append(key)
+
+        # d. Sort
+        while sources:
+            vertex = sources.popleft()
+            # add to sortedlist/res
+            sorted_list.append(vertex)
+            for child in graph[vertex]:  # get the node's children to decrement their in-degrees
+                in_degree[child] -= 1
+                if in_degree[child] == 0: # if child indegree becomes 0, enqueue to Queue
+                    sources.append(child)
+
+        # if sorted_list does not contain all the courses, there is a cyclic dependency between courses
+        # scheduling is not possible if there is a cyclic dependency
+        return len(sorted_list) == numCourses
+
         
