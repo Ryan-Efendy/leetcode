@@ -22,8 +22,8 @@ class Solution:
                         1|5   3|3        5+3=8
                        /     
                      2|3 
-        BFS/DFS
         
+        BFS/DFS
         '''
         idToEmployee = {employee.id: employee for employee in employees}
         
@@ -32,4 +32,17 @@ class Solution:
                 idToEmployee[id].importance += dfs(subordinate)
             return idToEmployee[id].importance
         
-        return dfs(id)
+        def bfs(id: int) -> int:
+            queue, res = deque([id]), 0
+            while queue:
+                id = queue.popleft()
+                res += idToEmployee[id].importance
+
+                for subordinate in idToEmployee[id].subordinates:
+                    queue.append(subordinate)
+            return res
+            
+        # return dfs(id)
+        return bfs(id)
+    
+    
