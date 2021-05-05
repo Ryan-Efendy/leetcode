@@ -1,7 +1,7 @@
 class Solution:
     def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
         '''
-        Detect cycle in an undirected graph
+        Detect cycle in an undirected graph/return all the nodes that are not a part of the cycle
         
         graph = [[1,2],[2,3],[5],[0],[5],[]]    
         {
@@ -24,36 +24,29 @@ class Solution:
         0: non-visited
         1: safe (terminal)
         2: unsafe (cycle)
-        '''
-        n = len(graph)
-        color = [0] * n
-        res = []
         
-        def dfs(start, color):
-            # if a node is marked as 2, it means you are currently checking out what you can reach starting from it.
-            if color[start] == 2:
-                # So if you reach a node marked as 2, that means there is a loop, because you went deeper into the loop but came out somewhere on a top level node
-                return False                     
-            # 1 means the node was marked completely visited, so you've checked out all its paths it could reach. The only way a node can be marked as 1 is if all 
-            elif color[start] == 1:              
-                # the following code completes without problems. That means no loop was detected in any of the paths starting from the "start" node.
-                return True                         
+        graph (3) colors 
+        visited[node] == 0: non-visited
+        visited[node] == 1: inProgress
+        node in cycle ==  : completed
+        
+        '''
+        def dfs(node, path, visited, cycle):
+            # if node is inProgress or cycle has already been detected
+            if visited[node] == 1 or node in cycle:
+                cycle |= set(path) # union
+            elif visited[node] == 0:
+                path.append(node)
+                visited[node] = 1 # change to inProgress
+                for child in graph[node]:
+                    dfs(child, path, visited, cycle)
+                visited[node] = 2 # update to complete
+                path.pop() # backtrack?
 
-            # You are exploring all paths from "start" node so mark it as being explored ("unsafe"). If you go deeper but came back out to here, then a loop must       
-            color[start] = 2                                                                     
-            # exist in the path you are trying to explore.     
-            for end in graph[start]:
-                # check path of all neighbors of the "start" node to see if a loop exists. If it does then this node leads to a loop so return False.
-                if not dfs(end, color):
-                    return False
-            # You have finished exploring all possible nodes you can reach from "start" node and found no loops so all paths starting from this node is "safe"
-            color[start] = 1                    
-            return True
-
-        for i in range(len(graph)):
-            if dfs(i, color):
-                res.append(i)
-
-        return res
+        cycle, visited = set(), [0] * len(graph)
+        for node in range(len(graph)):
+            dfs(node, [], visited, cycle)
+        # difference
+        return sorted(set(range(len(graph))) - cycle)
 
     
